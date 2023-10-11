@@ -1,7 +1,10 @@
-$fn=10;
-/* seashell(life=50,0,$fn=80); */
-//hulled_cylinders(r=1, h=.001, $fn=32);
-//shell(age=32, $fn=32);
+half_shell();
+
+/* $fn=8; */
+module half_shell(){
+  scale([1.2,1,0.6])
+  grow_shell(42);
+}
 
 //Rotation, translation, and scaling vectors
 kr=.6;
@@ -20,18 +23,18 @@ vt=kt*[
 
 ks=1.00;
 vs=ks*[
-  1.1125,
+  1.108,
   1.065,
   1
 ];
 
-grow_shell(0);
-#grow_shell(30);
+/* grow_shell(0); */
+
 
 module baseshape(){
-  spread=160;
-  step=10;
-  kerneltilt=135+10;
+  spread=165;
+  step=15;
+  kerneltilt=135+12.5;
   hk=2;
   hw=sin(kerneltilt-90)*hk;
 
@@ -41,23 +44,16 @@ module baseshape(){
   ox=4;
 
   translate([ox,0,0]){
-    for(ribrot=[-spread:10:spread]){
+    for(ribrot=[-spread:step:spread]){
         rotate([0,0,ribrot]) basekernel(kerneltilt,hk,tk,wk);
     }
-    /* hull(){ */
-    /*     rotate([0,0,spread+0.95*step]) basekernel(kerneltilt,hk,tk/4,wk); */
-    /*     translate([-ox-0.5,0,0]) cylinder(hk/4,d=tk/4); */
-    /* } */      
-    /* hull(){ */
-    /*     rotate([0,0,-(spread+0.95*step)]) basekernel(kerneltilt,hk,tk/4,wk); */
-    /*     translate([-ox-0.5,0,0]) cylinder(hk/4,d=tk/4); */
-    /* } */      
   }
 }
 
 module basekernel(kerneltilt,hk,tk,wk){
   translate([5,0,0]) rotate([0,kerneltilt,0])
     difference(){
+      scale([0.6,1,1]) 
       cylinder(h=hk,d=2*tk,center=true);
       translate([wk,0,0]) cube(10,center=true);
     }
@@ -65,29 +61,11 @@ module basekernel(kerneltilt,hk,tk,wk){
 
 
 module grow_shell(max=30){
+  union(){
   for(a=[0:max]){
      echo("step: ",a);
      segment_transform(a) {baseshape();};
   }
-}
-
-/* creates donut from both structures */
-module shell() {
-  /* difference() { */
-  /*   hulled_cylinders(r=1, h=.00001); */
-  /*   hulled_cylinders(r=.9, h=.0001); */
-  /* } */
-  hulled_cylinders(r=1, h=.00001);
-}
-
-/* creates two cylinders, slightly translated and rotated against each other */
-module hulled_cylinders(r, h) {
-  hull() {
-    cylinder(r=r, h=h, center=true);
-    scale(vs)
-      translate(vt)
-        rotate(vr)
-          cylinder(r=r, h=h, center=true);
   }
 }
 
