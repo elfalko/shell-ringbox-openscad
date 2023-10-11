@@ -1,14 +1,8 @@
 use <./seashell.scad>
 
-/* TODO */
-
-/*
-* magnets
-*/
-
 /* params */
 
-$fn=80;
+$fn=20;
 xo=7.5;
 yo=6;
 zo=-xo;
@@ -31,9 +25,8 @@ max_opening_angle=60;
 
 /* translate([0,0,25]) rotate([90,0,90]) ring(); */
 /* box(0); */
-/* box(60); */
-/* box(0,90,false); */
-/* box(90); */
+/* box(60,60,true); */
+/* box(0,60,true); */
 
 rotatable_shell(0);
 /* rotatable_shell(90); */
